@@ -5,9 +5,13 @@ use Application\Controllers\HomePageController\HomePageController;
 require_once('src/controllers/homepage.php');
 
 try {
-    if (isset($_GET['action']) && $_GET['action'] !== '') {
+    if (isset($_GET['action'])) {
 
         session_start();
+
+        if ($_GET['action'] === '') {
+            (new HomePageController())->execute();
+        }
 
         // Dashboard page
         if ($_GET['action'] === 'dashboard') {

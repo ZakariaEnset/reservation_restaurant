@@ -4,5 +4,11 @@
 <h1>Bienvenu cheez nous !</h1>
 
 
-<? $content = ob_get_clean(); ?>
-<?php require('layout.php'); ?>
+<div class="container mx-auto">
+    <a class="btn btn-lg btn-primary"><h1>Nouvelle Réservation</h1></a>
+    <a class="btn btn-lg btn-primary"><h1>Espace Admin</h1></a>
+
+</div>
+
+<?php $content = ob_get_clean(); ?>
+<?php require('layouts/layout.php'); ?>

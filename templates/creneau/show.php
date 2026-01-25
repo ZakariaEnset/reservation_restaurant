@@ -104,4 +104,4 @@ $(function() {
 <?php $content = ob_get_clean(); ?>
 
 
-<?php require('templates/admin_layout.php'); ?>
+<?php require('templates/layouts/admin_layout.php'); ?>
