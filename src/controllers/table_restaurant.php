@@ -77,7 +77,6 @@ class TableRestaurantController{
     }
 
     public function apiGet($id){
-            
         if(isset($id) && !is_null($id)){
             $table = $this->tableRestaurantRepository->getTableRestaurant($id);
             return json_encode($table);

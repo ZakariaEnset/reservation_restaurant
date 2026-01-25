@@ -4,23 +4,24 @@ use Application\Controllers\HomePageController\HomePageController;
 
 require_once('src/controllers/homepage.php');
 
-
-
-try{
+try {
     if (isset($_GET['action']) && $_GET['action'] !== '') {
-        
+
         session_start();
 
+        // Dashboard page
+        if ($_GET['action'] === 'dashboard') {
+            (new HomePageController())->dashboard();
+        }
 
         // gestion des tables restaurants
         require_once('routers/table_resertaurant.php');
 
         // gestion des creneaux
         require_once('routers/creneau.php');
-
-    }else{
-        (new HomePageController())->execute();     
+    } else {
+        (new HomePageController())->execute();
     }
-}catch(Exception $e){
+} catch (Exception $e) {
     // render page error
 }

@@ -8,6 +8,6 @@ class HomePageController {
     }
 
     public function dashboard(){
-        require('templates/dashboard');
+        require('templates/dashboard.php');
     }
 }
