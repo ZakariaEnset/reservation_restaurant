@@ -15,8 +15,11 @@ class TableRestaurant{
 
 class TableRestaurantRepository{
 
-    public DatabaseConnection $connection;
+    protected DatabaseConnection $connection;
 
+    public function __construct() {
+        $this->connection = new DatabaseConnection();
+    }
 
     public function getTableRestaurant($id): TableRestaurant{
         $statement = $this->connection->getConnection()->prepare(
@@ -50,22 +53,37 @@ class TableRestaurantRepository{
     }
 
     public function createTableRestaurant($numero, $capacite, $zone = ''): bool{
-        $statement = $this->connection->getConnection()->prepare(
-            'INSERT INTO tables_restaurant(numero, capacite, zone) VALUES(?, ?, ?)'
+        $statement =  $this->connection->getConnection()->prepare(
+            "SELECT * FROM tables_restaurant WHERE numero = ?"
         );
-        $affectedLines = $statement->execute([$numero, $capacite, $zone]);
-        return ($affectedLines > 0);
+        $statement->execute([$numero]);
+        $row = $statement->fetch();
+        if(empty($row)){
+
+            $statement = $this->connection->getConnection()->prepare(
+                'INSERT INTO tables_restaurant(numero, capacite, zone) VALUES(?, ?, ?)'
+            );
+            $affectedLines = $statement->execute([$numero, $capacite, $zone]);
+            return ($affectedLines > 0);
+        }
+        return false;
     }
 
     public function updateTableRestaurant(int $id, int $numero, int $capacite, string $zone) : bool{
-        // TODO: check if exixst before update
-        
-        $statement = $this->connection->getConnection()->prepare(
-            'UPDATE tables_restaurant SET numero = ?, capacite = ?, zone = ? WHERE id = ?'
+        $statement =  $this->connection->getConnection()->prepare(
+            "SELECT * FROM tables_restaurant WHERE numero = ? AND id != ?"
         );
-        $affectedLines = $statement->execute([$numero, $capacite, $zone, $id]);
+        $statement->execute([$numero, $id]);
+        $row = $statement->fetch();
+        if(empty($row)){
+            $statement = $this->connection->getConnection()->prepare(
+                'UPDATE tables_restaurant SET numero = ?, capacite = ?, zone = ? WHERE id = ?'
+            );
+            $affectedLines = $statement->execute([$numero, $capacite, $zone, $id]);
 
-        return ($affectedLines > 0);
+            return ($affectedLines > 0);
+        }
+        return false;
     }
 
     public function deleteTableRestaurant($id) : bool{

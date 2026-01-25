@@ -30,7 +30,7 @@
          <div id="navbarSearch" class="navbar-search w-100 collapse"> <input class="form-control w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search"> </div>
       </header>
       <div class="container-fluid">
-         <div class="row">
+         <div class="row" style="height: 90vh;">
             <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
                <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
                   <div class="offcanvas-header">
@@ -49,6 +49,12 @@
                            <a class="nav-link d-flex align-items-center gap-2   <?php echo str_contains($currentAction, 'table_restaurant') ? 'active' :  '' ?>" href="?action=table_restaurant" >
                              <i class="bi bi-tablet-fill"></i>
                               Tables restaurant
+                           </a>
+                        </li>
+                         <li class="nav-item">
+                           <a class="nav-link d-flex align-items-center gap-2   <?php echo str_contains($currentAction, 'creneaux') ? 'active' :  '' ?>" href="?action=creneaux" >
+                             <i class="bi bi-tablet-fill"></i>
+                              Creneaux
                            </a>
                         </li>
                      </ul>
@@ -75,6 +81,9 @@
                </div>
             </div>
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+               <div class="row mt-1">
+                  <?php require_once('templates/include/alert_messages.php'); ?>
+               </div>
                <?= $content  ?>
             </main>
          </div>
