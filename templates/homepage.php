@@ -5,7 +5,7 @@
 
 
 <div class="container mx-auto">
-    <a class="btn btn-lg btn-primary"><h1>Nouvelle Réservation</h1></a>
+    <a href="?action=add_reservation" class="btn btn-lg btn-primary"><h1>Nouvelle Réservation</h1></a>
     <a class="btn btn-lg btn-primary"><h1>Espace Admin</h1></a>
 
 </div>

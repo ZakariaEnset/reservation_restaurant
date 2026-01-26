@@ -6,22 +6,26 @@ require_once('src/lib/database.php');
 
 use Application\Lib\Database\DatabaseConnection;
 
-class TableRestaurant{
+class TableRestaurant
+{
     public int $id;
     public int $numero;
     public int $capacite;
     public string $zone;
 }
 
-class TableRestaurantRepository{
+class TableRestaurantRepository
+{
 
     protected DatabaseConnection $connection;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->connection = new DatabaseConnection();
     }
 
-    public function getTableRestaurant($id): TableRestaurant{
+    public function getTableRestaurant($id): TableRestaurant
+    {
         $statement = $this->connection->getConnection()->prepare(
             "SELECT * FROM tables_restaurant WHERE id = ?"
         );
@@ -35,12 +39,13 @@ class TableRestaurantRepository{
         return $table;
     }
 
-    public function getTablesRestaurant(): array{
+    public function getTablesRestaurant(): array
+    {
         $statement = $this->connection->getConnection()->query(
             "SELECT * FROM tables_restaurant"
         );
         $tables = [];
-        while(($row = $statement->fetch())){
+        while (($row = $statement->fetch())) {
             $table = new TableRestaurant();
             $table->id = $row['id'];
             $table->numero = $row['numero'];
@@ -52,13 +57,14 @@ class TableRestaurantRepository{
         return $tables;
     }
 
-    public function createTableRestaurant($numero, $capacite, $zone = ''): bool{
+    public function createTableRestaurant($numero, $capacite, $zone = ''): bool
+    {
         $statement =  $this->connection->getConnection()->prepare(
             "SELECT * FROM tables_restaurant WHERE numero = ?"
         );
         $statement->execute([$numero]);
         $row = $statement->fetch();
-        if(empty($row)){
+        if (empty($row)) {
 
             $statement = $this->connection->getConnection()->prepare(
                 'INSERT INTO tables_restaurant(numero, capacite, zone) VALUES(?, ?, ?)'
@@ -69,13 +75,14 @@ class TableRestaurantRepository{
         return false;
     }
 
-    public function updateTableRestaurant(int $id, int $numero, int $capacite, string $zone) : bool{
+    public function updateTableRestaurant(int $id, int $numero, int $capacite, string $zone): bool
+    {
         $statement =  $this->connection->getConnection()->prepare(
             "SELECT * FROM tables_restaurant WHERE numero = ? AND id != ?"
         );
         $statement->execute([$numero, $id]);
         $row = $statement->fetch();
-        if(empty($row)){
+        if (empty($row)) {
             $statement = $this->connection->getConnection()->prepare(
                 'UPDATE tables_restaurant SET numero = ?, capacite = ?, zone = ? WHERE id = ?'
             );
@@ -86,7 +93,8 @@ class TableRestaurantRepository{
         return false;
     }
 
-    public function deleteTableRestaurant($id) : bool{
+    public function deleteTableRestaurant($id): bool
+    {
         // TODO: before delete check if it's used at any reservation
 
         $statement = $this->connection->getConnection()->prepare(
@@ -94,5 +102,30 @@ class TableRestaurantRepository{
         );
         $affectedLines = $statement->execute([$id]);
         return ($affectedLines > 0);
+    }
+
+    public function getAvailableTableRestaurant($date, $creneau, $nbr_personnes)
+    {
+
+        $statement = $this->connection->getConnection()->prepare(
+            "SELECT t.* "
+                . "FROM tables_restaurant t "
+                . "WHERE t.capacite >= ? AND  NOT EXISTS "
+                . "(SELECT 1 FROM reservations r "
+                . "INNER JOIN creneaux c ON c.id = r.creneau_id "
+                . "WHERE r.statut = ? AND r.date_reservation = ? AND  r.table_id = t.id AND c.id = ?);"
+        );
+        $statement->execute([$nbr_personnes, 'confirmee', $date, $creneau]);
+        $row = $statement->fetch();
+        if(!empty($row)){
+            $table = new TableRestaurant();
+            $table->id = $row['id'];
+            $table->numero = $row['numero'];
+            $table->capacite = $row['capacite'];
+            $table->zone = $row['zone'];
+            return $table;
+        }
+        return null;
+       
     }
 }

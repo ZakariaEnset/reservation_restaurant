@@ -10,7 +10,7 @@ class Creneau {
     public int $id;
     public string $heure;
     public ServiceCreneau $service;
-
+    public bool $is_available;
 }
 
 enum ServiceCreneau: string {
@@ -100,5 +100,22 @@ class CreneauRepository{
         return ($affectedLines > 0);
     }
 
-    // TODO: function get crenau disponible par jour
+    public function getCreneauxWithAvailability($date): array {
+        $statement = $this->connection->getConnection()->prepare(
+            "SELECT c.*, CASE WHEN r.id  IS NULL THEN 1 ELSE 0 END as is_available "
+            ." FROM creneaux c "
+            ." LEFT JOIN reservations r on r.creneau_id = c.id AND r.date_reservation = ? AND r.statut = ? "
+        );
+        $statement->execute([$date, 'confirmee']);
+        $creneaux = [];
+        while(($row = $statement->fetch())){
+            $creneau = new Creneau();
+            $creneau->id = $row['id'];
+            $creneau->heure = $row['heure'];
+            $creneau->service = ServiceCreneau::from($row['service']);
+            $creneau->is_available = $row['is_available'];
+            $creneaux[] = $creneau;
+        }
+        return $creneaux;
+    }
 }
