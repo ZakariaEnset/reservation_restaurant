@@ -10,7 +10,7 @@
     <script src="public/js/bootstrap.bundle.min.js"></script>
     <script src="public/js/jquery.min.js"></script>
 </head>
-<body> 
+<body class=" h-100 "> 
     <?= $content  ?>
 </body>
 </html>

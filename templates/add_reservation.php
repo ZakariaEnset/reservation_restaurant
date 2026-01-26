@@ -1,72 +1,82 @@
 <?php $title = "Réservation Restaurant";  ?>
 
 <?php ob_start(); ?>
-<h1>Nouvelle réservation</h1>
 
 
 <div class="container">
-
     <?php if (!isset($_SESSION['reservation_success'])) { ?>
+        <a href="./" class="btn btn-lg m-2"><i class="bi bi-house"></i> Accueil</a>
+        <div class="card mt-3   ">
+            <h3 class="card-header">Nouvelle Réservation</h3>
 
-        <form class="row  g-3 align-items-center" action="?action=sauvegarder_reservation" method="POST">
-            <div class="col-md-4">
-                <label for="date_reservation">Data réservation</label>
-                <input class="form-control" lang="fr" type="date" name="dateReservation" id="date_reservation">
-            </div>
-
-            <div class="col-md-3">
-                <label for="date_reservation">Nombre des personnes</label>
-                <select class="form-select" name="nbrPersonnes" id="nbr_personnes">
-                    <?php for ($i = 2; $i <= 10; $i += 2) :  ?>
-                        <option value="<?= $i ?>"><?= $i ?></option>
-                    <?php endfor ?>
-                </select>
-            </div>
-
-            <input type="hidden" name="idCreneau" id="idCreneau">
-            <input type="hidden" name="idTableRestaurant" id="idTableRestaurant">
-            <div class="col-md-10" id="tableRestaurantBloc"></div>
-
-            <div class="col-md-10" id="creneauxBloc">
-
-            </div>
-
-            <div class="col-md-10" id="blocFinal">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">Informations de client</div>
+            <div class="card-body">
+                <form class="row  g-3 align-items-center" action="?action=sauvegarder_reservation" method="POST">
+                    <div class="col-md-4">
+                        <label for="date_reservation">Data réservation <span class="text-danger">(*)</span></label>
+                        <input class="form-control" lang="fr" type="date" name="dateReservation" id="date_reservation">
                     </div>
-                    <div class="card-body row  g-3 align-items-center">
-                        <div class="col-md-3">
-                            <label for="">Nom complete: </label>
-                            <input class="form-control" type="text" name="nomClient" id="nom_client">
-                        </div>
-                        <div class="col-md-3">
-                            <label for="">Email:</label>
-                            <input class="form-control" type="email" name="email" id="email">
-                        </div>
-                        <div class="col-md-3">
-                            <label for="">Télephone:</label>
-                            <input class="form-control" type="text" name="tel" id="tel">
-                        </div>
-                        <div class="col-md-3">
-                            <label for="">Commentaire</label>
-                            <textarea class="form-control" name="commentaires" id="commentaires"></textarea>
-                        </div>
+
+                    <div class="col-md-3">
+                        <label for="date_reservation">Nombre des personnes <span class="text-danger">(*)</span></label>
+                        <select class="form-select" name="nbrPersonnes" id="nbr_personnes">
+                            <?php for ($i = 2; $i <= 10; $i += 2) :  ?>
+                                <option value="<?= $i ?>"><?= $i ?></option>
+                            <?php endfor ?>
+                        </select>
                     </div>
-                </div>
 
-                <button id="btnSave" disabled class="btn btn-lg btn-success mt-3" type="submit">Sauvegarder</button>
+                    <input type="hidden" name="idCreneau" id="idCreneau">
+                    <input type="hidden" name="idTableRestaurant" id="idTableRestaurant">
+                    <div class="col-md-10" id="tableRestaurantBloc"></div>
+
+                    <div class="col-md-10" id="creneauxBloc">
+
+                    </div>
+
+                    <div class="col-md-10" id="blocFinal">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Informations de client</div>
+                            </div>
+                            <div class="card-body row  g-3 align-items-center">
+                                <div class="col-md-3">
+                                    <label for="">Nom complete: <span class="text-danger">(*)</span></label>
+                                    <input class="form-control" type="text" name="nomClient" id="nom_client">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="">Email: <span class="text-danger">(*)</span></label>
+                                    <input class="form-control" type="email" name="email" id="email">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="">Télephone:</label>
+                                    <input class="form-control" type="text" name="tel" id="tel">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="">Commentaire</label>
+                                    <textarea class="form-control" name="commentaires" id="commentaires"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button id="btnSave" disabled class="btn btn-lg btn-success mt-3" type="submit">Sauvegarder</button>
+                    </div>
+
             </div>
+        </div>
+</div>
 
-        <?php } else {  unset($_SESSION['reservation_success']);  ?>
+<?php } else {
+        unset($_SESSION['reservation_success']);  ?>
 
-            <div class="alert alert-dismissible alert-success">
-                <h4 class="alert-heading">Bon réservation!</h4>
-                <p class="mb-0"> <a href="?action=add_reservation" class="alert-link">Nouvelle réservation</a>.</p>
-            </div>
+    <div class="row text-center align-items-center mt-5">
+        <div class="alert alert-dismissible alert-success ">
+            <h4 class="alert-heading">Bon réservation!</h4>
+            <i style="font-size:50px;" class="bi bi-check-circle"></i>
+            <p class="my-3"> <a href="?action=add_reservation" class="alert-link"><strong>Nouvelle réservation <i class="bi bi-arrow-up-right"></i></strong></a></p>
+        </div>
+    </div>
 
-        <?php } ?>
+<?php } ?>
 </div>
 
 <script>
