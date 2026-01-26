@@ -108,7 +108,7 @@ class TableRestaurantRepository
     {
 
         $statement = $this->connection->getConnection()->prepare(
-            "SELECT t.* "
+                "SELECT t.* "
                 . "FROM tables_restaurant t "
                 . "WHERE t.capacite >= ? AND  NOT EXISTS "
                 . "(SELECT 1 FROM reservations r "

@@ -102,7 +102,7 @@ class CreneauRepository{
 
     public function getCreneauxWithAvailability($date): array {
         $statement = $this->connection->getConnection()->prepare(
-            "SELECT c.*, CASE WHEN r.id  IS NULL THEN 1 ELSE 0 END as is_available "
+            "SELECT  DISTINCT c.*, CASE WHEN r.id  IS NULL THEN 1 ELSE 0 END as is_available "
             ." FROM creneaux c "
             ." LEFT JOIN reservations r on r.creneau_id = c.id AND r.date_reservation = ? AND r.statut = ? ORDER BY c.heure "
         );

@@ -80,9 +80,9 @@
 </div>
 
 <script>
+    const emailRx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    var date_reservation;
     $(function() {
-        var date_reservation;
-        const emailRx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
         let minDateReservation = new Date();
         minDateReservation.setDate(new Date().getDate() + 1);
@@ -104,15 +104,15 @@
 
                 data.forEach(creneau => {
                     let not_avaiable_cls = '';
-                    if (!creneau.is_available) {
-                        not_avaiable_cls = 'disabled bg-light';
-                        // when we have after changes of date_reservation and nbr_persones
-                        // available creneu used before is the same this one, now  we should clear the value of input
-                        if ($('#idCreneau').val() == creneau.id) {
-                            $('#idCreneau').val('');
-                            $('#idTableRestaurant').val('');
-                        }
-                    }
+                    // if (!creneau.is_available) {
+                    //     not_avaiable_cls = 'disabled bg-light';
+                    //     // when we have after changes of date_reservation and nbr_persones
+                    //     // available creneu used before is the same this one, now  we should clear the value of input
+                    //     if ($('#idCreneau').val() == creneau.id) {
+                    //         $('#idCreneau').val('');
+                    //         $('#idTableRestaurant').val('');
+                    //     }
+                    // }
                     // `<button type='button' class='col-md-2 btn btn-lg btn-primary  ${not_avaiable_cls} m-2 creneauBtn ' id="creneau${creneau.id}" data-id-creneau=${creneau.id}>${creneau.heure}</button>
                     let btnCreneau = document.createElement('button');
                     $(btnCreneau).addClass(`col-md-2 btn btn-lg btn-primary  ${not_avaiable_cls} m-2 creneauBtn`);
@@ -124,33 +124,44 @@
                     $('#creneauxBloc').append(btnCreneau);
                 });
 
-                $('.creneauBtn').on('click', function(event) {
+                $('.creneauBtn').on('click',async function(event) {
                     $('#idCreneau').val($(event.currentTarget).data('id-creneau'));
                     $('.creneauBtn').removeClass('bg-info');
                     $(event.currentTarget).addClass('bg-info');
 
-                    getTableRestaurant(date_reservation, $('#idCreneau').val(), $('#nbr_personnes').val());
+                    await getTableRestaurant(date_reservation, $('#idCreneau').val(), $('#nbr_personnes').val());
+                    validateForm();
+
                 });
             });
         });
         $('#date_reservation').trigger('change');
 
-        $('#nbr_personnes').on('change', function(event) {
-            getTableRestaurant(date_reservation, $('#idCreneau').val(), $('#nbr_personnes').val(), $('#idCreneau').val());
+        $('#nbr_personnes').on('change', async function(event) {
+            await getTableRestaurant(date_reservation, $('#idCreneau').val(), $('#nbr_personnes').val());
+            validateForm();
         });
 
-        $('#date_reservation, #nbr_personnes, #nom_client, #email, #tel, #idCreneau').on('change blur', function() {
-            if (date_reservation != null && $('#idCreneau').val() != null && $('#nbr_personnes').val() != null && $('#idCreneau').val() &&
-                $('#idTableRestaurant').val() != null && $('#nom_client').val().length > 3 && emailRx.test($('#email').val())) {
-                $('#btnSave').removeAttr('disabled');
-            } else {
-                $('#btnSave').attr('disabled', 'disabled');
-            }
+        $('#date_reservation, #nom_client, #email, #tel').on('change', function() {
+            validateForm();
         });
 
     });
 
 
+    function validateForm(){
+        if (date_reservation != null 
+            && $('#idCreneau').val() != ''
+            && $('#nbr_personnes').val() != '' 
+            && $('#idTableRestaurant').val() != ''
+            && $('#nom_client').val().length > 3
+            && emailRx.test($('#email').val())) {
+
+            $('#btnSave').removeAttr('disabled');
+        } else {
+            $('#btnSave').attr('disabled', 'disabled');
+        }
+    }
 
     function getTableRestaurant(date, creneau, nbr_personnes) {
         let tableRestaurant = $.get('?action=api_get_available_table', {
@@ -169,6 +180,7 @@
                 $('#tableRestaurantBloc').html(`<div class='alert alert-warning'> Aucune table disponible à ces conditions ! </div>`);
                 $('#idTableRestaurant').val('');
             }
+            validateForm();
 
         });
     }
