@@ -58,25 +58,22 @@
                            </a>
                         </li>
                      </ul>
-                     <!-- <hr class="my-3"> -->
-                     <!-- <ul class="nav flex-column mb-auto">
-                        <li class="nav-item">
+                     <!-- <hr class="my-3">  -->
+                     <ul class="nav flex-column mb-auto">
+                        <!-- <li class="nav-item">
                            <a class="nav-link d-flex align-items-center gap-2" href="#">
                               <svg class="bi" aria-hidden="true">
                                  <use xlink:href="#gear-wide-connected"></use>
                               </svg>
                               Settings
                            </a>
-                        </li>
+                        </li> -->
                         <li class="nav-item">
-                           <a class="nav-link d-flex align-items-center gap-2" href="#">
-                              <svg class="bi" aria-hidden="true">
-                                 <use xlink:href="#door-closed"></use>
-                              </svg>
-                              Sign out
+                           <a class="nav-link d-flex align-items-center bg-danger text-white border gap-2 text-danger" href="?action=logout">
+                              <strong><i class="bi bi-box-arrow-left"></i> Déconnexion</strong>
                            </a>
                         </li>
-                     </ul> -->
+                     </ul>
                   </div>
                </div>
             </div>

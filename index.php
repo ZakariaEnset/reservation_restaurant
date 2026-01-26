@@ -35,6 +35,9 @@ try {
         }else if ($_GET['action'] === 'sauvegarder_reservation') {
             $inputs = $_POST;
             (new HomePageController())->sauvegarderReservation($inputs);
+        }elseif($_GET['action'] == 'logout'){
+            unset($_SESSION['admin']);
+            header('Location: ?action=');
         }
 
 
