@@ -1,4 +1,4 @@
-<?php $title = "Réservation Restaurant - Gestion tables";  ?>
+<?php $title = "Réservation Restaurant - Gestion creneaux";  ?>
 
 <?php ob_start(); ?>
 

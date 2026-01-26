@@ -1,4 +1,4 @@
-<?php $title = "Réservation Restaurant";  ?>
+<?php $title = "Réservation Restaurant - réservation";  ?>
 
 <?php ob_start(); ?>
 
