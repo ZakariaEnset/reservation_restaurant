@@ -1,8 +1,11 @@
 <?php
 
 use Application\Controllers\HomePageController;
+use Application\Controllers\LoginController;
 
 require_once('src/controllers/homepage.php');
+require_once('src/controllers/login.php');
+
 
 try {
     if (isset($_GET['action'])) {
@@ -12,31 +15,31 @@ try {
         // home page
         if ($_GET['action'] === '') {
             (new HomePageController())->execute();
+        }else if ($_GET['action'] === 'login_form') {
+            (new LoginController())->showLogin();
+        }else if ($_GET['action'] === 'login') {
+            $username = $_POST['username'];
+            $mdp = $_POST['mdp'];
+            (new LoginController())->login($username, $mdp);
         }
-
-        // add reservation
-        if ($_GET['action'] === 'add_reservation') {
+        else if ($_GET['action'] === 'add_reservation') {
             (new HomePageController())->addReservation();
-        }
-
-        if($_GET['action'] === 'api_get_creneaux'){
+        }else if ($_GET['action'] === 'api_get_creneaux') {
             $date = $_GET['date'];
             echo (new HomePageController())->apiGetCreneauxAvailable($date);
-        }
-
-        if($_GET['action'] === 'api_get_available_table'){
+        }else if ($_GET['action'] === 'api_get_available_table') {
             $date = $_GET['date'];
             $creneau = $_GET['creneau'];
             $nbr_personnes = $_GET['nbr_personnes'];
             echo (new HomePageController())->apiGetAvailableTableRestaurant($date, $creneau, $nbr_personnes);
+        }else if ($_GET['action'] === 'sauvegarder_reservation') {
+            $inputs = $_POST;
+            (new HomePageController())->sauvegarderReservation($inputs);
         }
 
 
-        if ($_GET['action'] === 'sauvegarder_reservation') {
-                $inputs = $_POST;
-                (new HomePageController())->sauvegarderReservation($inputs);
-            }
-
+        // admin routes
+       
         // dashboard
         require_once('routers/dashboard.php');
 

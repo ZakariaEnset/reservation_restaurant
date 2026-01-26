@@ -18,4 +18,4 @@ if ($_GET['action'] === 'creneaux') {
 } else if ($_GET['action'] === 'delete_table_creneau') {
     $input = $_POST['id'];
     (new CreneauController())->delete($input);
-}
+} 

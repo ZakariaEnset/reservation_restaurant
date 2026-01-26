@@ -11,6 +11,12 @@ class TableRestaurantController{
     protected $tableRestaurantRepository;
 
     public function __construct() {
+
+        if(!isset($_SESSION["admin"])){
+            (new LoginController())->showLogin();
+            exit;
+        }
+
         $this->tableRestaurantRepository = new TableRestaurantRepository();
     }
 

@@ -13,6 +13,11 @@ class CreneauController
 
     public function __construct()
     {
+        if(!isset($_SESSION["admin"])){
+            (new LoginController())->showLogin();
+            exit;
+        }
+
         $this->creneauRepository = new CreneauRepository();
     }
 
