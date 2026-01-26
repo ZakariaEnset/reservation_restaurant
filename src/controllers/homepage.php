@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Controllers\HomePageController;
+namespace Application\Controllers;
 
 
 require_once('src/model/creneau.php');
@@ -30,11 +30,6 @@ class HomePageController
     public function execute()
     {
         require('templates/homepage.php');
-    }
-
-    public function dashboard()
-    {
-        require('templates/dashboard.php');
     }
 
     public function addReservation()

@@ -1,6 +1,6 @@
 <?php
 
-use Application\Controllers\HomePageController\HomePageController;
+use Application\Controllers\HomePageController;
 
 require_once('src/controllers/homepage.php');
 
@@ -37,10 +37,8 @@ try {
                 (new HomePageController())->sauvegarderReservation($inputs);
             }
 
-        // Admin Dashboard page
-        if ($_GET['action'] === 'dashboard') {
-            (new HomePageController())->dashboard();
-        }
+        // dashboard
+        require_once('routers/dashboard.php');
 
         // gestion des tables restaurants
         require_once('routers/table_resertaurant.php');
