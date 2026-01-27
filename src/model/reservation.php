@@ -3,9 +3,15 @@
 namespace Application\Model\Reservation;
 
 require_once('src/lib/database.php');
+require_once('src/lib/util.php');
+require_once('src/lib/mail.php');
+
+
 
 use Application\Lib\Database\DatabaseConnection;
+use ReservationMail;
 
+use function Application\Lib\generateRandomString;
 
 class Reservation
 {
@@ -84,7 +90,7 @@ class ReservationRepository
 
     public function changerStatutReservation($idReservation, $statut): bool
     {
-        if ($statut = 'confirmee') {
+        if ($statut == 'confirmee') {
             // get infos current reservation
             $statement =  $this->connection->getConnection()->prepare(
                 "SELECT * FROM reservations WHERE id = ?"
@@ -98,9 +104,22 @@ class ReservationRepository
             );
             $statement->execute([$reservation['date_reservation'], $reservation['creneau_id'], $reservation['table_id'], 'confirmee']);
             $reservationConflit = $statement->fetch();
-            if(!empty($reservationConflit)){
+            if (!empty($reservationConflit)) {
                 return false;
             }
+
+            // send code confirmation
+            $code = generateRandomString(10);
+            $mailSended = (new ReservationMail())->sendConfirmationCode($reservation['email'], $code);
+            if($mailSended){
+                $statement = $this->connection->getConnection()->prepare(
+                    "UPDATE reservations SET  statut = ?,  code_confirmation = ? WHERE id = ?"
+                );
+                $affectedLines = $statement->execute([$statut, $code, $idReservation]);
+    
+                return $affectedLines > 0;
+            }
+            return false;
         }
 
         $statement = $this->connection->getConnection()->prepare(

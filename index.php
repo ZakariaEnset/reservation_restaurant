@@ -5,9 +5,13 @@ use Application\Controllers\LoginController;
 
 require_once('src/controllers/homepage.php');
 require_once('src/controllers/login.php');
+require 'vendor/autoload.php';
 
 
 try {
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
+    
     if (isset($_GET['action'])) {
 
         session_start();

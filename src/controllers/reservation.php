@@ -30,9 +30,7 @@ class ReservationController
             if (!$success) {
                 $_SESSION['error'] = "Erreur lors changement de statut conflit réservation";
             } else {
-                $_SESSION['success'] = 'Le statut de réservation est changé';
-                // TODO: if statut = confirmee send email with code_confirmation
-                // and update reservation to reservation
+                $_SESSION['success'] = 'Le statut de réservation est mise à jour';
             }
         } else {
             $_SESSION['error'] = 'Les données sont invalides.';
