@@ -123,7 +123,7 @@ class ReservationRepository
         }
 
         $statement = $this->connection->getConnection()->prepare(
-            "UPDATE reservations SET statut = ? WHERE id = ?"
+            "UPDATE reservations SET statut = ?, code_confirmation = '' WHERE id = ?"
         );
         $affectedLines = $statement->execute([$statut, $idReservation]);
 
