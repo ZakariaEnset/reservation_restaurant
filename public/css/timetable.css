@@ -1,0 +1,336 @@
+.timetable {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.timetable::after {
+    clear: both;
+    content: "";
+    display: table;
+}
+
+.timetable *,
+.timetable *:before,
+.timetable *:after {
+    box-sizing: inherit;
+}
+
+.timetable ul,
+.timetable li {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.timetable aside,
+.timetable section {
+    float: left;
+}
+
+.timetable aside {
+    width: 15%;
+    padding: 0 !important;
+    margin-top: 60px;
+    border-right: 5px solid transparent;
+}
+
+.timetable aside li {
+    padding: 0 15px;
+    background-color: #EFEFEF;
+    line-height: 60px;
+    transition: background-color 0.2s ease;
+}
+
+.timetable aside li:hover {
+    background-color: #e0e0e0;
+}
+
+.timetable aside li:not(:last-of-type) {
+    border-bottom: 1px solid #fff;
+}
+
+aside ul li {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    height: 60px;
+    border-right: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.timetable ul {
+    list-style-type: none;
+    margin: 0;
+}
+
+.timetable aside li,
+.timetable time li {
+    height: 60px;
+}
+
+.timetable section {
+    width: 75%;
+    padding: 0 !important;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    background-color: #fff;
+    border-radius: 0 4px 4px 0;
+}
+
+.timetable section time {
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.timetable section header {
+    height: 60px;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    font-size: 0;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #e5e5e5;
+    position: sticky;
+    top: 0;
+    z-index: 4;
+}
+
+.timetable section header::after {
+    clear: both;
+    content: "";
+    display: table;
+}
+
+.timetable section header li {
+    display: inline-block;
+    font-size: 1rem;
+    overflow: visible;
+    width: 0;
+    line-height: 60px;
+    display: inline-block;
+    position: relative;
+    color: #555;
+    font-weight: 500;
+}
+
+.timetable section header li:not(:last-of-type) {
+    width: 96px;
+}
+
+.timetable section header li .time-label {
+    display: block;
+    position: absolute;
+    left: 0;
+}
+
+.timetable section header li:not(:first-of-type) .time-label {
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+.timetable section header li:last-of-type .time-label {
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+}
+
+@media only screen and (max-width: 960px) {
+    .timetable aside {
+        width: 40%;
+    }
+
+    .timetable section {
+        width: 60%;
+    }
+}
+
+.room-timeline {
+    position: relative;
+    height: auto;
+}
+
+.time-entry {
+    position: absolute;
+    height: 60px;
+    box-sizing: border-box;
+    font-size: 12px !important;
+}
+
+.timetable ul.room-timeline {
+    border-left: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.timetable ul.room-timeline li {
+    position: relative;
+    background-color: #F4F4F4;
+    height: 60px;
+}
+
+.timetable ul.room-timeline li:nth-of-type(odd) {
+    background-color: #FDFDFD;
+}
+
+.timetable ul.room-timeline li:first-of-type {
+    border-top: 1px solid #E5E5E5;
+}
+
+.timetable ul.room-timeline li:last-of-type {
+    border-bottom: 1px solid #E5E5E5;
+}
+
+.timetable ul.room-timeline li:not(:last-of-type) {
+    border-bottom: none;
+}
+
+.timetable ul.room-timeline li:first-child .time-entry {
+    height: 60px;
+}
+
+.timetable ul.room-timeline li:after,
+.timetable ul.room-timeline li:before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.timetable ul.room-timeline li:before {
+    background-image: linear-gradient(to right, #E5E5E5 1px, transparent 1px);
+    background-size: 24px auto;
+}
+
+.timetable ul.room-timeline li:after {
+    background-image: linear-gradient(to right, #E5E5E5, #E5E5E5 1px, #F4F4F4 1px, #F4F4F4 2px, #E5E5E5 2px, #E5E5E5 3px, transparent 3px, transparent);
+    background-size: 96px auto;
+    background-position: -2px 0;
+}
+
+/* Enhanced Time Entry Styles with Always-Visible Action Buttons */
+.timetable .time-entry {
+    background-color: #EC6A5E;
+    transition: all 0.2s ease;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 2;
+    padding: 5px 35px 5px 10px; /* Right padding for action buttons */
+    white-space: normal;
+    overflow: hidden;
+    color: #fff;
+    border: 1px solid #e32c1b;
+    border-radius: 3px;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    top: 0;
+    cursor: pointer;
+}
+
+.timetable .time-entry:hover {
+    background-color: #e74030;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.time-entry-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.timetable .time-entry small {
+    line-height: 1.3;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.timetable .time-entry small:first-child {
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.timetable .time-entry small:last-child {
+    font-size: 0.9em;
+    opacity: 0.9;
+}
+
+/* Action Buttons Styling - Always Visible */
+.time-entry-actions {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    opacity: 1 !important;
+    visibility: visible !important;
+    background: transparent;
+    z-index: 3;
+}
+
+.time-entry-action {
+    width: 22px;
+    height: 22px;
+    border: none;
+    background: rgba(255,255,255,0.9);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+    color: #555;
+    transition: all 0.2s ease;
+}
+
+.time-entry-action:hover {
+    background: #fff;
+    transform: scale(1.1);
+}
+
+.time-entry-action.edit {
+    color: #3498db;
+}
+
+.time-entry-action.delete {
+    color: #e74c3c;
+}
+
+/* Lane positions */
+.timetable .time-entry.lane-1 { top: 0; }
+.timetable .time-entry.lane-2 { top: 60px; }
+.timetable .time-entry.lane-3 { top: 120px; }
+.timetable .time-entry.lane-4 { top: 180px; }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .timetable .time-entry {
+        padding-right: 30px;
+    }
+    
+    .time-entry-actions {
+        flex-direction: row;
+        gap: 3px;
+    }
+    
+    .time-entry-action {
+        width: 20px;
+        height: 20px;
+        font-size: 11px;
+    }
+    
+    .timetable .time-entry small {
+        white-space: normal;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+}

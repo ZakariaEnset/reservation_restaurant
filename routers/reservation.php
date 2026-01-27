@@ -12,4 +12,6 @@ if ($_GET['action'] === 'reservations') {
     $idReservation = $_POST['id'];
     $statut = $_POST['statut'];
     (new ReservationController())->changeReservationStatut($idReservation, $statut);
+}else if($_GET['action'] === 'calendrier'){
+    (new ReservationController())->calandar($_GET['date']??'');
 }

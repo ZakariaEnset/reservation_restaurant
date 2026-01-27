@@ -24,7 +24,7 @@ class Reservation
     public int $tableId;
     public int $nbrPersonnnes;
     public string $commentaire;
-    public string $status;
+    public string $statut;
     public string $codeCofirmation;
     public string $dateCreation;
 }
@@ -40,7 +40,7 @@ class ReservationRepository
     }
 
 
-    public function getReservations($filterParams = []): array
+    public function getReservations($filterParams): array
     {
         $sqlQuery =  "SELECT r.*, tr.numero numero_table, tr.zone zone_table, c.heure heure_creneau, c.service service_creneau "
             . "FROM reservations r "
@@ -50,6 +50,10 @@ class ReservationRepository
         if (isset($filterParams['statut'])) {
             $sqlQuery .= " AND r.statut = :statut ";
         }
+        if (isset($filterParams['date']) && !empty($filterParams['date'])) {
+            $sqlQuery .= " AND r.date_reservation = :date ";
+        }
+
 
         $sqlQuery .= ' ORDER BY r.date_reservation DESC';
 
@@ -60,6 +64,11 @@ class ReservationRepository
         if (isset($filterParams['statut'])) {
             $statement->bindParam('statut', $filterParams['statut']);
         }
+
+         if (isset($filterParams['date']) && !empty($filterParams['date'])) {
+            $statement->bindParam('date', $filterParams['date']);
+        }
+
 
         $statement->execute();
         $reservations = $statement->fetchAll();

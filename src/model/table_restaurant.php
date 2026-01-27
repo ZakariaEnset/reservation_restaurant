@@ -128,4 +128,8 @@ class TableRestaurantRepository
         return null;
        
     }
+
+    public function apiGetTableRestaurant(){
+        return json_encode($this->getTablesRestaurant());
+    }
 }
