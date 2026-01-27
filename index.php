@@ -51,6 +51,8 @@ try {
 
         // gestion des creneaux
         require_once('routers/creneau.php');
+
+        require_once('routers/reservation.php');
     } else {
         (new HomePageController())->execute();
     }

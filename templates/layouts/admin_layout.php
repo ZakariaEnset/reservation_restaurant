@@ -45,6 +45,11 @@
                               Dashboard
                            </a>
                         </li>
+                         <li class="nav-item">
+                           <a class="nav-link d-flex align-items-center gap-2   <?php echo str_contains($currentAction, 'reservations') ? 'active' :  '' ?>" href="?action=reservations" >
+                             <i class="bi bi-tablet-fill"></i>
+                              Réservations
+                           </a>
                         <li class="nav-item">
                            <a class="nav-link d-flex align-items-center gap-2   <?php echo str_contains($currentAction, 'table_restaurant') ? 'active' :  '' ?>" href="?action=table_restaurant" >
                              <i class="bi bi-tablet-fill"></i>
