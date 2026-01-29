@@ -13,9 +13,7 @@
 </head>
 
 <body class=" h-100 ">
-    <div class="row mt-1">
-        <?php require_once('templates/include/alert_messages.php'); ?>
-    </div>
+    <?php require_once('templates/include/alert_messages.php'); ?>
     <?= $content  ?>
 </body>
 

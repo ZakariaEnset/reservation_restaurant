@@ -1,3 +1,4 @@
+<div class="row mt-1">
 <?php
 
 // TODO: need imporvement
@@ -33,3 +34,7 @@ if (isset($_SESSION['warning'])) {
 <?php
     unset($_SESSION['warning']);
 }
+
+?>
+</div>
+
