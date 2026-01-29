@@ -76,6 +76,12 @@
     var renderer = new Timetable.Renderer(timetable);
     renderer.draw('.timetable');
 
+
+    $(function() {
+        let dateInput = "<?= isset($_GET['date']) && !empty($_GET['date']) ? $_GET['date'] : date('Y-m-d')  ?>";
+        $('#date').val(dateInput);
+    });
+
 </script>
 
 <?php $content = ob_get_clean(); ?>
