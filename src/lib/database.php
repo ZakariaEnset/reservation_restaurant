@@ -9,7 +9,7 @@ class DatabaseConnection {
 
     public function getConnection(): \PDO{
         if($this->database === null){
-            $this->database = new \PDO('mysql:host=localhost;dbname=reservation_restaurant;charset=utf8', 'root', 'root');
+            $this->database = new \PDO("mysql:host=".$_ENV['DB_HOSTNAME'].";dbname=". $_ENV['DB_NAME'] .";charset=utf8",  $_ENV['DB_USERNAME'] , $_ENV['DB_PASSWORD']);
             $this->database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         }
