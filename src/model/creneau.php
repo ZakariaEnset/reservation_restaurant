@@ -6,26 +6,31 @@ require_once('src/lib/database.php');
 
 use Application\Lib\Database\DatabaseConnection;
 
-class Creneau {
+class Creneau
+{
     public int $id;
     public string $heure;
     public ServiceCreneau $service;
     public bool $is_available;
 }
 
-enum ServiceCreneau: string {
+enum ServiceCreneau: string
+{
     case midi = 'midi';
     case soir = 'soir';
 }
 
-class CreneauRepository{
+class CreneauRepository
+{
     protected DatabaseConnection $connection;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->connection = new DatabaseConnection();
     }
 
-    public function getCreneau($id) : Creneau{
+    public function getCreneau($id): Creneau
+    {
         $statement = $this->connection->getConnection()->prepare(
             "SELECT * FROM creneaux WHERE id = ?"
         );
@@ -38,12 +43,13 @@ class CreneauRepository{
         return $creneau;
     }
 
-    public function getCreneaux(): array {
-         $statement = $this->connection->getConnection()->query(
+    public function getCreneaux(): array
+    {
+        $statement = $this->connection->getConnection()->query(
             "SELECT * FROM creneaux order by heure"
         );
         $creneaux = [];
-        while(($row = $statement->fetch())){
+        while (($row = $statement->fetch())) {
             $creneau = new Creneau();
             $creneau->id = $row['id'];
             $creneau->heure = $row['heure'];
@@ -54,14 +60,15 @@ class CreneauRepository{
         return $creneaux;
     }
 
-    public function createCreneau($heure, $service) {
+    public function createCreneau($heure, $service)
+    {
         $statement =  $this->connection->getConnection()->prepare(
             "SELECT * FROM creneaux WHERE heure = ?"
         );
         $statement->execute([$heure]);
         $row = $statement->fetch();
 
-        if(empty($row)){
+        if (empty($row)) {
             $statement = $this->connection->getConnection()->prepare(
                 'INSERT INTO creneaux(heure, service) VALUES(?, ?)'
             );
@@ -72,14 +79,15 @@ class CreneauRepository{
     }
 
 
-    public function updateCreneau(int $id, $heure, $service) : bool{
+    public function updateCreneau(int $id, $heure, $service): bool
+    {
         $statement =  $this->connection->getConnection()->prepare(
             "SELECT * FROM creneaux WHERE heure = ? AND id != ?"
         );
         $statement->execute([$heure, $id]);
         $row = $statement->fetch();
 
-        if(empty($row)){
+        if (empty($row)) {
             $statement = $this->connection->getConnection()->prepare(
                 'UPDATE creneaux SET heure = ?, service = ? WHERE id = ?'
             );
@@ -90,25 +98,34 @@ class CreneauRepository{
         return false;
     }
 
-    public function deleteCreneau($id) : bool{
-        // TODO: before delete check if it's used at any reservation
-
+    public function deleteCreneau($id): bool
+    {
         $statement = $this->connection->getConnection()->prepare(
-            'DELETE FROM creneaux WHERE id = ?'
+            "SELECT c.id FROM creneaux c where c.id = ? AND EXISTS (SELECT 1 FROM reservations r WHERE r.creneau_id = c.id);"
         );
-        $affectedLines = $statement->execute([$id]);
-        return ($affectedLines > 0);
+        $statement->execute([$id]);
+        $row = $statement->fetch();
+
+        if (is_null($row['id'])) {
+            $statement = $this->connection->getConnection()->prepare(
+                'DELETE FROM creneaux WHERE id = ?'
+            );
+            $affectedLines = $statement->execute([$id]);
+            return ($affectedLines > 0);
+        }
+        return false;
     }
 
-    public function getCreneauxWithAvailability($date): array {
+    public function getCreneauxWithAvailability($date): array
+    {
         $statement = $this->connection->getConnection()->prepare(
             "SELECT  DISTINCT c.*, CASE WHEN r.id  IS NULL THEN 1 ELSE 0 END as is_available "
-            ." FROM creneaux c "
-            ." LEFT JOIN reservations r on r.creneau_id = c.id AND r.date_reservation = ? AND r.statut = ? ORDER BY c.heure "
+                . " FROM creneaux c "
+                . " LEFT JOIN reservations r on r.creneau_id = c.id AND r.date_reservation = ? AND r.statut = ? ORDER BY c.heure "
         );
         $statement->execute([$date, 'confirmee']);
         $creneaux = [];
-        while(($row = $statement->fetch())){
+        while (($row = $statement->fetch())) {
             $creneau = new Creneau();
             $creneau->id = $row['id'];
             $creneau->heure = $row['heure'];

@@ -6,13 +6,15 @@ require_once('src/model/table_restaurant.php');
 
 use Application\Model\TableRestaurant\TableRestaurantRepository;
 
-class TableRestaurantController{
+class TableRestaurantController
+{
 
     protected $tableRestaurantRepository;
 
-    public function __construct() {
+    public function __construct()
+    {
 
-        if(!isset($_SESSION["admin"])){
+        if (!isset($_SESSION["admin"])) {
             (new LoginController())->showLogin();
             exit;
         }
@@ -20,13 +22,15 @@ class TableRestaurantController{
         $this->tableRestaurantRepository = new TableRestaurantRepository();
     }
 
-    public function show(){
+    public function show()
+    {
         $tables = $this->tableRestaurantRepository->getTablesRestaurant();
-      
+
         require('templates/table_restaurant/show.php');
     }
 
-    public function add(array $input){
+    public function add(array $input)
+    {
         $numero = null;
         $capacite = null;
         $zone = null;
@@ -47,7 +51,8 @@ class TableRestaurantController{
         }
     }
 
-    public function edit(array $input){
+    public function edit(array $input)
+    {
         $id = null;
         $numero = null;
         $capacite = null;
@@ -58,7 +63,7 @@ class TableRestaurantController{
             $numero = $input['numero'];
             $capacite = $input['capacite'];
             $zone = trim($input['zone']);
-             $success = $this->tableRestaurantRepository->updateTableRestaurant($id, $numero, $capacite, $zone);
+            $success = $this->tableRestaurantRepository->updateTableRestaurant($id, $numero, $capacite, $zone);
             if (!$success) {
                 $_SESSION['error'] = 'Table restaurant déja exists!';
             } else {
@@ -70,26 +75,22 @@ class TableRestaurantController{
         header('Location: index.php?action=table_restaurant');
     }
 
-    public function delete($id){
-        if(isset($id) && !is_null($id)){
-
+    public function delete($id)
+    {
+        if (isset($id) && !is_null($id)) {
             $success = $this->tableRestaurantRepository->deleteTableRestaurant($id);
             if (!$success) {
-                throw new \Exception('Impossible de supprimer la table !');
-            } else {
-                header('Location: index.php?action=table_restaurant');
+                $_SESSION['error'] = 'Impossible de supprimer ce creneau !';
             }
         }
+        header('Location: index.php?action=table_restaurant');
     }
 
-    public function apiGet($id){
-        if(isset($id) && !is_null($id)){
+    public function apiGet($id)
+    {
+        if (isset($id) && !is_null($id)) {
             $table = $this->tableRestaurantRepository->getTableRestaurant($id);
             return json_encode($table);
         }
     }
-
-
-
-
 }

@@ -85,14 +85,14 @@ class ReservationRepository
                 . "VALUES(?, ?, ?, ?, ?, ?, ?, ?)"
         );
         $affectedLines = $statement->execute([
-            $inputs['nomClient'],
+            trim($inputs['nomClient']),
             $inputs['email'],
             $inputs['tel'],
             $inputs['dateReservation'],
             $inputs['idCreneau'],
             $inputs['idTableRestaurant'],
             $inputs['nbrPersonnes'],
-            $inputs['commentaires']
+            trim($inputs['commentaires'])
         ]);
         return ($affectedLines > 0);
     }

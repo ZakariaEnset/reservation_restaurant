@@ -95,20 +95,27 @@ class TableRestaurantRepository
 
     public function deleteTableRestaurant($id): bool
     {
-        // TODO: before delete check if it's used at any reservation
-
         $statement = $this->connection->getConnection()->prepare(
-            'DELETE FROM tables_restaurant WHERE id = ?'
+            "SELECT t.id FROM tables_restaurant t where t.id = ? AND EXISTS (SELECT 1 FROM reservations r WHERE r.table_id = t.id);"
         );
-        $affectedLines = $statement->execute([$id]);
-        return ($affectedLines > 0);
+        $statement->execute([$id]);
+        $row = $statement->fetch();
+
+        if (is_null($row['id'])) {
+            $statement = $this->connection->getConnection()->prepare(
+                'DELETE FROM tables_restaurant WHERE id = ?'
+            );
+            $affectedLines = $statement->execute([$id]);
+            return ($affectedLines > 0);
+        }
+        return false;
     }
 
     public function getAvailableTableRestaurant($date, $creneau, $nbr_personnes)
     {
 
         $statement = $this->connection->getConnection()->prepare(
-                "SELECT t.* "
+            "SELECT t.* "
                 . "FROM tables_restaurant t "
                 . "WHERE t.capacite >= ? AND  NOT EXISTS "
                 . "(SELECT 1 FROM reservations r "
@@ -117,7 +124,7 @@ class TableRestaurantRepository
         );
         $statement->execute([$nbr_personnes, 'confirmee', $date, $creneau]);
         $row = $statement->fetch();
-        if(!empty($row)){
+        if (!empty($row)) {
             $table = new TableRestaurant();
             $table->id = $row['id'];
             $table->numero = $row['numero'];
@@ -126,10 +133,10 @@ class TableRestaurantRepository
             return $table;
         }
         return null;
-       
     }
 
-    public function apiGetTableRestaurant(){
+    public function apiGetTableRestaurant()
+    {
         return json_encode($this->getTablesRestaurant());
     }
 }
