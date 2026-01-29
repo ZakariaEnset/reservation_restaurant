@@ -138,4 +138,14 @@ class ReservationRepository
 
         return ($affectedLines > 0);
     }
+
+    public function getStatistiquesStatutReservation(){
+        $statement = $this->connection->getConnection()->query(
+            "SELECT COUNT(id) total_count, SUM(CASE WHEN statut = 'en_attente' THEN 1 ELSE 0 END) en_attente_count, "
+            ."SUM(CASE WHEN statut = 'confirmee' THEN 1 ELSE 0 END) confirmee_count, "
+            ." SUM(CASE WHEN statut = 'annulee' THEN 1 ELSE 0 END) annulee_count FROM reservations;"
+        );
+        $statement->execute();
+        return $statement->fetch();
+    }
 }
