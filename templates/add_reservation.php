@@ -2,7 +2,6 @@
 
 <?php ob_start(); ?>
 
-
 <div class="container">
     <?php if (!isset($_SESSION['reservation_success'])) { ?>
         <a href="./" class="btn btn-lg m-2"><i class="bi bi-house"></i> Accueil</a>
@@ -28,10 +27,7 @@
                     <input type="hidden" name="idCreneau" id="idCreneau">
                     <input type="hidden" name="idTableRestaurant" id="idTableRestaurant">
                     <div class="col-md-10" id="tableRestaurantBloc"></div>
-
-                    <div class="col-md-10" id="creneauxBloc">
-
-                    </div>
+                    <div class="col-md-10" id="creneauxBloc"></div>
 
                     <div class="col-md-10" id="blocFinal">
                         <div class="card">
@@ -57,10 +53,8 @@
                                 </div>
                             </div>
                         </div>
-
                         <button id="btnSave" disabled class="btn btn-lg btn-success mt-3" type="submit">Sauvegarder</button>
                     </div>
-
             </div>
         </div>
 </div>
@@ -68,13 +62,13 @@
 <?php } else {
         unset($_SESSION['reservation_success']);  ?>
 
-    <div class="row text-center align-items-center mt-5">
-        <div class="alert alert-dismissible alert-success ">
-            <h4 class="alert-heading">Bon réservation!</h4>
-            <i style="font-size:50px;" class="bi bi-check-circle"></i>
-            <p class="my-3"> <a href="?action=add_reservation" class="alert-link"><strong>Nouvelle réservation <i class="bi bi-arrow-up-right"></i></strong></a></p>
+        <div class="row text-center align-items-center mt-5">
+            <div class="alert alert-dismissible alert-success ">
+                <h4 class="alert-heading">Bon réservation!</h4>
+                <i style="font-size:50px;" class="bi bi-check-circle"></i>
+                <p class="my-3"> <a href="?action=add_reservation" class="alert-link"><strong>Nouvelle réservation <i class="bi bi-arrow-up-right"></i></strong></a></p>
+            </div>
         </div>
-    </div>
 
 <?php } ?>
 </div>
@@ -83,13 +77,10 @@
     const emailRx = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var date_reservation;
     $(function() {
-
         let minDateReservation = new Date();
         minDateReservation.setDate(new Date().getDate() + 1);
         $('#date_reservation').val(minDateReservation.toISOString().split('T')[0]);
         $('#date_reservation').attr('min', minDateReservation.toISOString().split('T')[0]);
-
-
         $('#date_reservation').on('change', function(event) {
             date_reservation = $(event.target).val();
             let creneaux = $.get('?action=api_get_creneaux', {
@@ -98,28 +89,14 @@
             creneaux.done(function(data) {
                 data = JSON.parse(data);
                 $('#creneauxBloc').html('');
-
                 $('#tableRestaurantBloc').html('');
                 $('#idTableRestaurant').val('');
-
                 data.forEach(creneau => {
-                    let not_avaiable_cls = '';
-                    // if (!creneau.is_available) {
-                    //     not_avaiable_cls = 'disabled bg-light';
-                    //     // when we have after changes of date_reservation and nbr_persones
-                    //     // available creneu used before is the same this one, now  we should clear the value of input
-                    //     if ($('#idCreneau').val() == creneau.id) {
-                    //         $('#idCreneau').val('');
-                    //         $('#idTableRestaurant').val('');
-                    //     }
-                    // }
-                    // `<button type='button' class='col-md-2 btn btn-lg btn-primary  ${not_avaiable_cls} m-2 creneauBtn ' id="creneau${creneau.id}" data-id-creneau=${creneau.id}>${creneau.heure}</button>
                     let btnCreneau = document.createElement('button');
-                    $(btnCreneau).addClass(`col-md-2 btn btn-lg btn-primary  ${not_avaiable_cls} m-2 creneauBtn`);
+                    $(btnCreneau).addClass(`col-md-2 btn btn-lg btn-primary m-2 creneauBtn`);
                     $(btnCreneau).attr('type', 'button');
                     $(btnCreneau).attr('id', `creneau${creneau.id}`);
                     $(btnCreneau).data('id-creneau', creneau.id);
-
                     $(btnCreneau).text(creneau.heure);
                     $('#creneauxBloc').append(btnCreneau);
                 });
@@ -131,7 +108,6 @@
 
                     await getTableRestaurant(date_reservation, $('#idCreneau').val(), $('#nbr_personnes').val());
                     validateForm();
-
                 });
             });
         });
@@ -145,9 +121,7 @@
         $('#date_reservation, #nom_client, #email, #tel').on('change', function() {
             validateForm();
         });
-
     });
-
 
     function validateForm(){
         if (date_reservation != null 
@@ -169,22 +143,21 @@
             creneau: creneau,
             nbr_personnes: nbr_personnes
         });
-
         tableRestaurant.done(function(data) {
             data = JSON.parse(data);
-            if (data !== null) {
+            if (data && data.id != 0) {
                 $('#tableRestaurantBloc').html('');
                 $('#tableRestaurantBloc').append(`<div class='alert alert-light'>La table <strong>N° ${data.numero}</strong> zone: <strong>${data.zone}</strong> </div>`);
                 $('#idTableRestaurant').val(data.id)
             } else {
-                $('#tableRestaurantBloc').html(`<div class='alert alert-warning'> Aucune table disponible à ces conditions ! </div>`);
+                if($('#idCreneau').val() != ''){
+                   $('#tableRestaurantBloc').html(`<div class='alert alert-warning'> Aucune table disponible à ces choix ! </div>`);
+                }
                 $('#idTableRestaurant').val('');
             }
             validateForm();
-
         });
     }
 </script>
-
 <?php $content = ob_get_clean(); ?>
 <?php require('layouts/layout.php'); ?>

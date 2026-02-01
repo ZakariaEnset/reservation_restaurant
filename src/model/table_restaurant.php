@@ -113,14 +113,14 @@ class TableRestaurantRepository
 
     public function getAvailableTableRestaurant($date, $creneau, $nbr_personnes)
     {
-
         $statement = $this->connection->getConnection()->prepare(
             "SELECT t.* "
                 . "FROM tables_restaurant t "
                 . "WHERE t.capacite >= ? AND  NOT EXISTS "
                 . "(SELECT 1 FROM reservations r "
                 . "INNER JOIN creneaux c ON c.id = r.creneau_id "
-                . "WHERE r.statut = ? AND r.date_reservation = ? AND  r.table_id = t.id AND c.id = ?);"
+                . "WHERE r.statut = ? AND r.date_reservation = ? AND  r.table_id = t.id AND c.id = ?) "
+                . "ORDER BY t.capacite ASC LIMIT 1"
         );
         $statement->execute([$nbr_personnes, 'confirmee', $date, $creneau]);
         $row = $statement->fetch();

@@ -14,9 +14,9 @@
                 <label for="">Statut:</label>
                 <select class="form-select" name="statut" id="statutFilter" onchange="submit()">
                     <option value="">Tous</option>
-                    <option <?php echo $_GET['statut'] == 'en_attente' ? 'selected' : '' ?> value="en_attente">en_attente</option>
-                    <option <?php echo $_GET['statut'] == 'confirmee' ? 'selected' : '' ?> value="confirmee">confirmee</option>
-                    <option <?php echo $_GET['statut'] == 'annulee' ? 'selected' : '' ?> value="annulee">annulee</option>
+                    <option <?php echo $_GET['statut'] ?? '' == 'en_attente' ? 'selected' : '' ?> value="en_attente">En attente</option>
+                    <option <?php echo $_GET['statut'] ?? '' == 'confirmee' ? 'selected' : '' ?> value="confirmee">Confirmé</option>
+                    <option <?php echo $_GET['statut'] ?? '' == 'annulee' ? 'selected' : '' ?> value="annulee">Annulée</option>
                 </select>
             </div>
         </form>
@@ -84,9 +84,9 @@
                     <div class="form-group">
                         <label for="">Statut</label>
                         <select class="form-select" name="statut" id="statut">
-                            <option value="en_attente">en_attente</option>
-                            <option value="confirmee">confirmee</option>
-                            <option value="annulee">annulee</option>
+                            <option value="en_attente">En attente</option>
+                            <option value="confirmee">Confirmée</option>
+                            <option value="annulee">Annulée</option>
                         </select>
                     </div>
 

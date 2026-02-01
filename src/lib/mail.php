@@ -1,13 +1,11 @@
 <?php
 
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 class ReservationMail
 {
     public PHPMailer $mail;
-
     public function __construct()
     {
         $this->mail = new PHPMailer(true);

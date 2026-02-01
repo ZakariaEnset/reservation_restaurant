@@ -99,6 +99,7 @@ class ReservationRepository
 
     public function changerStatutReservation($idReservation, $statut): bool
     {
+        $code = null;
         if ($statut == 'confirmee') {
             // get infos current reservation
             $statement =  $this->connection->getConnection()->prepare(
@@ -116,25 +117,17 @@ class ReservationRepository
             if (!empty($reservationConflit)) {
                 return false;
             }
-
             // send code confirmation
             $code = generateRandomString(10);
             $mailSended = (new ReservationMail())->sendConfirmationCode($reservation['email'], $code);
-            if($mailSended){
-                $statement = $this->connection->getConnection()->prepare(
-                    "UPDATE reservations SET  statut = ?,  code_confirmation = ? WHERE id = ?"
-                );
-                $affectedLines = $statement->execute([$statut, $code, $idReservation]);
-    
-                return $affectedLines > 0;
+            if(!$mailSended){
+                return false;
             }
-            return false;
         }
-
         $statement = $this->connection->getConnection()->prepare(
-            "UPDATE reservations SET statut = ?, code_confirmation = '' WHERE id = ?"
+            "UPDATE reservations SET statut = ?, code_confirmation = ? WHERE id = ?"
         );
-        $affectedLines = $statement->execute([$statut, $idReservation]);
+        $affectedLines = $statement->execute([$statut, $code, $idReservation]);
 
         return ($affectedLines > 0);
     }

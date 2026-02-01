@@ -46,7 +46,7 @@ body {
             </div>
         </header>
         <main class="px-3 mt-5" style="height: 85vh";>
-            <h1>Bienvenu cheez nous !.</h1>
+            <h1>Bienvenu chez nous !.</h1>
             <p class="lead">Système de Réservation Restaurant</p>
 
                <div class="d-flex">

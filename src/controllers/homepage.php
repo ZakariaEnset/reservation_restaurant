@@ -47,10 +47,11 @@ class HomePageController
 
     public function apiGetAvailableTableRestaurant($date, $creneau, $nb_personnes)
     {
-        if (isset($date) && isset($creneau) && isset($nb_personnes)) {
+        if (!empty($date) && !empty($creneau) && !empty($nb_personnes)) {
             $table = $this->tableRestaurantRepository->getAvailableTableRestaurant($date, $creneau, $nb_personnes);
             return json_encode($table);
         }
+        return json_encode('');
     }
 
     public function sauvegarderReservation($inputs){
