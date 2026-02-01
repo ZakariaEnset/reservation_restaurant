@@ -3,7 +3,7 @@ Système de Réservation (Restaurant)
 
 
 # Rapport
-* doc/rapport.pdf
+* doc/Rapport.pdf
 ---
 
 # Installation
