@@ -2,6 +2,8 @@ Projet 10
 Système de Réservation (Restaurant)
 
 
+# Rapport
+* doc/rapport.pdf
 ---
 
 # Installation
