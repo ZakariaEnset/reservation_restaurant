@@ -21,17 +21,16 @@ composer install
 
 * Renommer le fichier **.env.example** en **.env**, puis renseigner les informations de connexion à la base de données ainsi que la configuration SMTP pour l’envoi des e-mails.
 
-* Importer la base de données **db.sql**.
+* Importer la base de données **doc/reservation_restaurant.sql**.
 
 ## Lancement
 
-[http://localhost/reservation_restaurant/](http://localhost/reservation_restaurant/)
+- Local : [http://localhost/reservation_restaurant/](http://localhost/reservation_restaurant/)
+- Démo En ligne: [http://bouskif.dwm.ma/](http://bouskif.dwm.ma/)
 
-### Espace administrateur
+## Espace administrateur
 
 Identifiants :
 
 * **Nom d’utilisateur** : admin
 * **Mot de passe** : 123456
-
----
